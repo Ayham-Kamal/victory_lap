@@ -37,7 +37,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 
 ## Connect to database using Python
 To connect to database use the following code (You will need to plug in the correct address for the database_url (refer to discord))
-
+```Python
 import psycopg
 
 database_url = "..."
@@ -64,3 +64,4 @@ with conn.cursor() as cur:
 
 # Close the connection when done
 conn.close()
+```
