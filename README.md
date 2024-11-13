@@ -34,3 +34,33 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Connect to database using Python
+To connect to database use the following code (You will need to plug in the correct address for the database_url (refer to discord))
+
+import psycopg
+
+database_url = "..."
+
+conn = psycopg.connect(database_url)
+
+# Example query
+with conn.cursor() as cur:
+    # Query to get table names and column details
+    cur.execute("""
+        SELECT table_name, column_name, data_type
+        FROM information_schema.columns
+        WHERE table_schema = 'public'
+        ORDER BY table_name, ordinal_position;
+    """)
+    schema = cur.fetchall()
+    # Print schema details in a similar way to `.schema`
+    current_table = None
+    for table_name, column_name, data_type in schema:
+        if table_name != current_table:
+            print(f"\nTABLE:\n{table_name}\n")
+            current_table = table_name
+        print(f"    {column_name} {data_type}")
+
+# Close the connection when done
+conn.close()
