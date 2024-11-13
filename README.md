@@ -65,3 +65,11 @@ with conn.cursor() as cur:
 # Close the connection when done
 conn.close()
 ```
+
+## Sync local repository to match the master github repo (DELETES ALL UNPUSHED COMMITS)
+Run these commands in your terminal if you need your local repository to match the master repository found on Github
+These commands will delete any commits that have not been pushed. Make sure your commits are pushed before executing.
+```Bash
+git fetch origin
+git reset --hard origin/master
+```
