@@ -1,16 +1,22 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, g, request, jsonify
 from app.utils.db import execute_query
+from backend.app.utils.jwt_helper import token_required
 
 workout_bp = Blueprint('workout', __name__)
 
 # Log a new workout
 @workout_bp.route('/log', methods=['POST'])
+@token_required
 def log_workout():
+    user_id = g.user_id  # Use JWT-authenticated user_id
     data = request.json
-    user_id = data.get('user_id')
     workout_name = data.get('workout_name')
     muscle_group = data.get('muscle_group')
     duration = data.get('duration')  # ex: minutes
+
+    # Validate inputs
+    if not workout_name or not muscle_group or not duration:
+        return jsonify({'error': 'All fields are required'}), 400
 
     # Insert workout into the database
     execute_query(
@@ -21,14 +27,17 @@ def log_workout():
 
 # View logged workouts
 @workout_bp.route('/log', methods=['GET'])
+@token_required
 def view_workouts():
-    user_id = request.args.get('user_id')  # Fetch user ID from query params
+    user_id = g.user_id  # Use JWT-authenticated user_id
 
     # Retrieve workouts from the database
     results = execute_query(
         "SELECT id, workout_name, duration, calories_burned FROM workouts WHERE user_id = %s",
         (user_id,), fetchall=True
     )
+    if results:
+        return jsonify(results), 200
     return jsonify({'error': 'No workouts found'}), 404
 
 # Delete a logged workout

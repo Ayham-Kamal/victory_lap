@@ -2,3 +2,5 @@ Flask
 Flask-CORS
 psycopg
 bcrypt
+PyJWT
+python-dotenv

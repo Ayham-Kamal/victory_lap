@@ -94,3 +94,16 @@ Within this file add the url/DB connection. This will ensure our DB is not publi
    ```txt
     DATABASE_URL= '...'
    ```
+## Generate a Secret Key for JWT
+To generate a new secret key, run the following command in the backend directory:
+```bash
+python3 secret_key_generator.py
+```
+Copy the output and add it to the .env file as:
+```bash
+JWT_SECRET_KEY=your_generated_key_here
+```
+Example:
+```bash
+JWT_SECRET_KEY=d12f3ab6c47f4f8e9f30e7bc972acaba0a903ed7d3f40b8b1947f8eced309013
+```
